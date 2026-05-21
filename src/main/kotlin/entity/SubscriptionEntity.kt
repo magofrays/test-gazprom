@@ -20,17 +20,17 @@ import java.util.UUID
 class SubscriptionEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: UUID = UUID.randomUUID(),
+    var id: UUID = UUID.randomUUID(),
     var userId: String,
     var serviceId: String,
     @Enumerated(EnumType.STRING)
     var status: SubscriptionStatus,
     var startDate: Instant,
-    var duration: Duration,
+    var duration: Integer, // days
     var endDate: Instant,
 
     @OneToMany(mappedBy = "subscription", cascade = [CascadeType.ALL])
-    var history: MutableList<SubscriptionUpdateEntity> = mutableListOf(),  // ← MutableList
+    var history: MutableList<SubscriptionUpdateEntity> = mutableListOf(),
 
     var updatedAt: Instant = Instant.now(),
     var createdAt: Instant = Instant.now(),

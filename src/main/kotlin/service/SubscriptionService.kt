@@ -70,7 +70,7 @@ open class SubscriptionService @Autowired constructor(
         subscriptionEntity.startDate = request.startDate ?: subscriptionEntity.startDate
         subscriptionEntity.duration = request.duration ?: subscriptionEntity.duration
         subscriptionEntity.endDate = (request.startDate ?: subscriptionEntity.startDate)
-            .plus(request.duration ?: subscriptionEntity.duration)
+            .plus((request.duration ?: subscriptionEntity.duration).toLong(), ChronoUnit.DAYS)
         if(request.status != null || request.duration != null){
             val updateSubscription = createUpdateForSubscription(subscriptionEntity)
             subscriptionEntity.history.add(updateSubscription)

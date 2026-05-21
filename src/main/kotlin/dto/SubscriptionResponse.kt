@@ -1,15 +1,14 @@
 package by.magofrays.dto
 
-import java.time.Duration
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
-data class SubscriptionResponse (
+data class SubscriptionResponse(
     val id: UUID,
     val userId: String,
     val service: String,
     val startDate: Instant,
-    val duration: Duration,
+    val duration: Integer,
     val status: SubscriptionStatus,
     val updateStatusDate: Instant,
     val endDate: Instant,

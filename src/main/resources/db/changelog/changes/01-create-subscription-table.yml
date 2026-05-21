@@ -36,10 +36,10 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: duration
-                  type: NUMERIC(21,0)
+                  type: INT
                   constraints:
                     nullable: false
-                  remarks: "Duration in milliseconds"
+                  remarks: "Duration in days"
               - column:
                   name: end_date
                   type: TIMESTAMP WITH TIME ZONE

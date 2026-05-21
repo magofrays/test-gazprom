@@ -26,7 +26,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: new_duration
-                  type: NUMERIC(21,0)
+                  type: INT
                   constraints:
                     nullable: false
                   remarks: "Duration in milliseconds"

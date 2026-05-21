@@ -12,7 +12,7 @@ import java.util.UUID
 class NotificationEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: UUID = UUID.randomUUID(),
+    var id: UUID = UUID.randomUUID(),
     var userId: String,
     var message: String,
     var createdAt: Instant = Instant.now()
