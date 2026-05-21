@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 02-create-subscription-update-table
+      author: magofrays
+      changes:
+        - createTable:
+            tableName: subscription_update_entity
+            remarks: "Table for storing subscription update history"
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: subscription_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: new_status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: new_duration
+                  type: NUMERIC(21,0)
+                  constraints:
+                    nullable: false
+                  remarks: "Duration in milliseconds"
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName: fk_subscription_update_subscription
+            baseTableName: subscription_update_entity
+            baseColumnNames: subscription_id
+            referencedTableName: subscription_entity
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+  - changeSet:
+      id: 02-add-check-constraints-update-table
+      author: magofrays
+      changes:
+        - sql:
+            sql: ALTER TABLE subscription_update_entity ADD CONSTRAINT chk_update_status CHECK (new_status IN ('ACTIVE', 'EXPIRED', 'CANCELLED', 'FROZEN'))
+        - sql:
+            sql: ALTER TABLE subscription_update_entity ADD CONSTRAINT chk_update_duration CHECK (new_duration > 0)

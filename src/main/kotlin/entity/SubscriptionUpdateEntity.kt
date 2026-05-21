@@ -2,8 +2,11 @@ package by.magofrays.entity
 
 import by.magofrays.dto.SubscriptionStatus
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import java.time.Duration
 import java.time.Instant
@@ -11,10 +14,12 @@ import java.util.UUID
 
 @Entity
 class SubscriptionUpdateEntity (
+    @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: UUID = UUID.randomUUID(),
     @ManyToOne
     var subscription: SubscriptionEntity,
+    @Enumerated(EnumType.STRING)
     var newStatus: SubscriptionStatus,
     var newDuration: Duration,
     var updatedAt: Instant

@@ -10,6 +10,7 @@ import by.magofrays.exception.BusinessException
 import by.magofrays.mapper.SubscriptionMapper
 import by.magofrays.repository.SubscriptionRepository
 import by.magofrays.repository.SubscriptionUpdateRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit
 
 
 @Service
-class SubscriptionService(
+open class SubscriptionService @Autowired constructor(
     val subscriptionRepository: SubscriptionRepository,
     val subscriptionUpdateRepository: SubscriptionUpdateRepository,
     val subscriptionMapper: SubscriptionMapper, private val notificationService: NotificationService,

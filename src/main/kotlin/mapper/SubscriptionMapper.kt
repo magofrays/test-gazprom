@@ -7,10 +7,11 @@ import org.mapstruct.AfterMapping
 import org.mapstruct.Mapper
 import org.mapstruct.MappingTarget
 
+
 @Mapper(componentModel = "spring")
-interface SubscriptionMapper {
-    fun toDto(entity: SubscriptionEntity) : SubscriptionResponse
-    fun toEntity(dto: SubscriptionRequest) : SubscriptionEntity
+abstract class SubscriptionMapper {
+    abstract fun toDto(entity: SubscriptionEntity): SubscriptionResponse
+    abstract fun toEntity(dto: SubscriptionRequest): SubscriptionEntity
 
     @AfterMapping
     fun setEndDate(@MappingTarget entity: SubscriptionEntity, request: SubscriptionRequest) {

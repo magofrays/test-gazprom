@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-subscription-table
+      author: magofrays
+      changes:
+        - createTable:
+            tableName: subscription_entity
+            remarks: "Table for storing subscriptions"
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: service_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: duration
+                  type: NUMERIC(21,0)
+                  constraints:
+                    nullable: false
+                  remarks: "Duration in milliseconds"
+              - column:
+                  name: end_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 01-add-check-constraint-subscription-status
+      author: magofrays
+      changes:
+        - sql:
+            sql: ALTER TABLE subscription_entity ADD CONSTRAINT chk_subscription_status CHECK (status IN ('ACTIVE', 'EXPIRED', 'CANCELLED', 'FROZEN'))
+        - sql:
+            sql: ALTER TABLE subscription_entity ADD CONSTRAINT chk_subscription_duration CHECK (duration > 0)
