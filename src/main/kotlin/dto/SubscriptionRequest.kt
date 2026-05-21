@@ -23,5 +23,5 @@ data class SubscriptionRequest(
 
     @NotNull(groups = [CreateGroup::class], message = "duration is required for creation")
     @Positive(groups = [CreateGroup::class, UpdateGroup::class], message = "duration must be positive")
-    val duration: Integer?
+    val duration: Int?
 )

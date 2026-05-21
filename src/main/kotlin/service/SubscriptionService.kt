@@ -27,9 +27,8 @@ import java.util.concurrent.TimeUnit
 
 
 @Service
-open class SubscriptionService @Autowired constructor(
+open class SubscriptionService(
     val subscriptionRepository: SubscriptionRepository,
-    val subscriptionUpdateRepository: SubscriptionUpdateRepository,
     val subscriptionMapper: SubscriptionMapper, private val notificationService: NotificationService,
     @Value("\${scheduler.check-subscription.ending-hours:24}")
     private val checkSubscriptionEnding: Long,
@@ -100,10 +99,11 @@ open class SubscriptionService @Autowired constructor(
             .forEach { entity ->
                 entity.status = SubscriptionStatus.EXPIRED
                 entity.updatedAt = Instant.now()
+                val updateSubscription = createUpdateForSubscription(entity)
+                entity.history?.add(updateSubscription)
                 if (notificationSentMap.containsKey(entity.id)) {
                     notificationSentMap.remove(entity.id)
                 }
-
             }
     }
 

@@ -21,6 +21,6 @@ class SubscriptionUpdateEntity (
     var subscription: SubscriptionEntity,
     @Enumerated(EnumType.STRING)
     var newStatus: SubscriptionStatus,
-    var newDuration: Integer, //days
+    var newDuration: Int, //days
     var updatedAt: Instant? = null
 )

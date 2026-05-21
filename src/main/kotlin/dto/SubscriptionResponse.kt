@@ -8,7 +8,7 @@ data class SubscriptionResponse(
     val userId: String,
     val serviceId: String,
     val startDate: Instant,
-    val duration: Integer,
+    val duration: Int,
     val status: SubscriptionStatus,
     val endDate: Instant,
     val createdAt: Instant,

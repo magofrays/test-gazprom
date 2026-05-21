@@ -11,7 +11,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.PrePersist
 import jakarta.persistence.PreUpdate
-import java.time.Duration
 import java.time.Instant
 import java.util.UUID
 
@@ -26,7 +25,7 @@ class SubscriptionEntity (
     @Enumerated(EnumType.STRING)
     var status: SubscriptionStatus,
     var startDate: Instant,
-    var duration: Integer, // days
+    var duration: Int, // days
     var endDate: Instant?,
 
     @OneToMany(mappedBy = "subscription", cascade = [CascadeType.ALL])

@@ -1,4 +1,8 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
+
   application:
     name: "subscription-service"
   datasource:
