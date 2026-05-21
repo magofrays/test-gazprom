@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:17-alpine3.22
+    environment:
+      - 'POSTGRES_DB=subscription_db'
+      - 'POSTGRES_PASSWORD=subscription_db'
+      - 'POSTGRES_USER=subscription_db'
+    ports:
+      - "127.0.0.1:5433:5432"
+
+
+volumes:
+  pg_data:
