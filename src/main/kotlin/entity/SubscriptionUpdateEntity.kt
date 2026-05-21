@@ -16,11 +16,11 @@ import java.util.UUID
 class SubscriptionUpdateEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    var id: UUID = UUID.randomUUID(),
+    var id: UUID? = null,
     @ManyToOne
     var subscription: SubscriptionEntity,
     @Enumerated(EnumType.STRING)
     var newStatus: SubscriptionStatus,
     var newDuration: Integer, //days
-    var updatedAt: Instant
+    var updatedAt: Instant? = null
 )

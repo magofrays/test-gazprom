@@ -1,19 +1,28 @@
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM gradle:8.7-jdk21 AS build
 WORKDIR /app
 
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
+COPY build.gradle.kts build.gradle.kts
+COPY settings.gradle.kts settings.gradle.kts
+COPY gradle.properties gradle.properties
+
+COPY gradle gradle
+COPY gradlew gradlew
+COPY gradlew.bat gradlew.bat
+
+RUN chmod +x gradlew
+
+RUN ./gradlew dependencies --no-daemon
 
 COPY src src
 
-RUN mvn clean package -DskipTests
+RUN ./gradlew bootJar --no-daemon
 
 FROM eclipse-temurin:21-jre-alpine
-
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+RUN apk add --no-cache curl
 
-EXPOSE 8081
+COPY --from=build /app/build/libs/*.jar app.jar
 
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

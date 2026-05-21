@@ -16,24 +16,25 @@ import java.util.*
 interface SubscriptionRepository :
     JpaRepository<SubscriptionEntity, UUID>,
     JpaSpecificationExecutor<SubscriptionEntity> {
+
     @Query(
         "SELECT s FROM SubscriptionEntity s " +
                 "WHERE (:userId IS NULL OR s.userId = :userId) " +
                 "AND (:status IS NULL OR s.status = :status) " +
                 "AND (:serviceId IS NULL OR s.serviceId = :serviceId) " +
-                "AND (:dateFrom IS NULL OR s.startDate >= :dateFrom) " +
-                "AND (:dateTo IS NULL OR s.startDate <= :dateTo)"
+                "AND (CAST(:dateFrom AS java.time.Instant) IS NULL OR s.startDate >= :dateFrom) " +
+                "AND (CAST(:dateTo AS java.time.Instant) IS NULL OR s.startDate <= :dateTo)"
     )
     fun findAllByFilter(
-        pageable: Pageable,
         @Param("userId") userId: String?,
         @Param("status") status: SubscriptionStatus?,
         @Param("serviceId") serviceId: String?,
         @Param("dateFrom") dateFrom: Instant?,
-        @Param("dateTo") dateTo: Instant?
+        @Param("dateTo") dateTo: Instant?,
+        pageable: Pageable
     ): Page<SubscriptionEntity>
 
-    fun findAllByEndDateBeforeAndStatus(date : Instant, status : SubscriptionStatus) : List<SubscriptionEntity>
+    fun findAllByEndDateBeforeAndStatus(date: Instant, status: SubscriptionStatus): List<SubscriptionEntity>
 
-    fun findAllByEndDateBetweenAndStatus(startDate: Instant, endDate: Instant, status: SubscriptionStatus) : List<SubscriptionEntity>
+    fun findAllByEndDateBetweenAndStatus(startDate: Instant, endDate: Instant, status: SubscriptionStatus): List<SubscriptionEntity>
 }

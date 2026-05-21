@@ -38,21 +38,21 @@ open class SubscriptionService @Autowired constructor(
 
     fun findAllSubscriptions(filter: SubscriptionFilterRequest, pageable: Pageable): Page<SubscriptionResponse> {
         return subscriptionRepository.findAllByFilter(
-            pageable,
             filter.userId,
             filter.status,
             filter.serviceId,
             filter.dateFrom,
-            filter.dateTo
+            filter.dateTo,
+            pageable
         ).map { entity -> subscriptionMapper.toDto(entity) }
     }
 
     @Transactional
     fun createSubscription(request: SubscriptionRequest): SubscriptionResponse {
-        var entity = subscriptionMapper.toEntity(request);
-        entity = subscriptionRepository.save(entity)
+        var entity = subscriptionMapper.toEntity(request)
         val historyUpdate = createUpdateForSubscription(entity)
-        entity.history.add(historyUpdate)
+        entity.history?.add(historyUpdate)
+        entity = subscriptionRepository.save(entity)
         return subscriptionMapper.toDto(entity)
     }
 
@@ -73,7 +73,7 @@ open class SubscriptionService @Autowired constructor(
             .plus((request.duration ?: subscriptionEntity.duration).toLong(), ChronoUnit.DAYS)
         if(request.status != null || request.duration != null){
             val updateSubscription = createUpdateForSubscription(subscriptionEntity)
-            subscriptionEntity.history.add(updateSubscription)
+            subscriptionEntity.history?.add(updateSubscription)
         }
         return subscriptionMapper.toDto(subscriptionEntity)
     }
@@ -116,12 +116,13 @@ open class SubscriptionService @Autowired constructor(
             SubscriptionStatus.ACTIVE
         )
             .forEach { entity ->
-                if (!notificationSentMap.containsKey(entity.id)) {
+                val entityId = entity.id
+                if (entityId != null && !notificationSentMap.containsKey(entityId)) {
                     notificationService.createNotification(
                         entity.userId,
                         "Your subscription ends less than in $checkSubscriptionEnding hours"
                     )
-                    notificationSentMap[entity.id] = Instant.now()
+                    notificationSentMap[entityId] = Instant.now()
                 }
             }
     }
@@ -134,6 +135,6 @@ open class SubscriptionService @Autowired constructor(
             newDuration = subscription.duration,
             updatedAt = subscription.updatedAt
         )
-        return subscriptionUpdateRepository.save(updateSubscription)
+        return updateSubscription
     }
 }
