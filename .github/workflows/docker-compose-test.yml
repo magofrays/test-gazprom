@@ -1,0 +1,33 @@
+name: Docker Compose Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-docker-compose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          cat << EOF > .env
+          APP_PORT=8080
+          NOTIFICATION_BEFORE_ENDING_HOURS=24
+          DB_CONTAINER=postgres
+          DB_NAME=subscription_db
+          DB_PASSWORD=subscription_db
+          DB_USER=subscription_db
+          DB_PORT=5432
+          EOF
+
+      - name: Start Docker Compose services
+        run: docker compose up -d
+
+      - name: Check container status
+        run: bash ci/check-containers.sh
